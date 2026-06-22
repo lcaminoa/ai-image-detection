@@ -6,35 +6,31 @@ from PIL import Image
 import matplotlib.pyplot as plt
 import random
 
-# Algunos originales superan el límite por defecto (aprox 89M px). 200M cubre
-# fotos de cámara profesional sin desactivar la protección completamente.
-Image.MAX_IMAGE_PIXELS = 200_000_000
-
-# Extensiones de imagen válidas. Set para que 'in' sea rápido
-EXTS = {".jpg", ".jpeg", ".png", ".webp"}
-SPLITS = ["train", "test"]
-CLASES = ["real", "fake"]
+from src.config import IMG_EXTS, CLASES, RAW_SPLITS
+# Al importar config.py también se configura Image.MAX_IMAGE_PIXELS = 200_000_000
 
 
 def listar_imagenes(carpeta: Path):
     """
-    Devuelve la lista de Paths de imágenes en 'carpeta'.
-    Filtra por extensión para ignorar archivos colados (.DS_Store, etc.).
+    Devuelve una lista con los Paths de las imágenes en 'carpeta'.
+    Filtra por extensión para ignorar otros archivos (.DS_Store, etc.).
     """
     if not carpeta.exists():
         print(f"No existe: {carpeta}")
         return []
-    return [p for p in carpeta.iterdir() if p.is_file() and p.suffix.lower() in EXTS]
+    return [p for p in carpeta.iterdir() if p.is_file() and p.suffix.lower() in IMG_EXTS]
 
 
 def contar_dataset(raw: Path):
     """
-    Recorre las 4 carpetas (split x clase) y cuenta imágenes.
-    Devuelve un dict {(split, clase): [paths]} para reusar después.
+    Recorre las 4 combinaciones de carpeta (train/real, train/fake,
+    test/real, test/fake) del dataset raw, cuenta cuántas imágenes hay
+    en cada una, imprime el resumen, y devuelve un diccionario:
+        {(split, clase): [paths]}
     """
     conteo = {}
-    for split in SPLITS:
-        for clase in CLASES:
+    for split in RAW_SPLITS: # Para train y test (dataset raw)
+        for clase in CLASES: # Para real y fake
             imgs = listar_imagenes(raw / split / clase)
             conteo[(split, clase)] = imgs
             print(f"{split}/{clase:5s}: {len(imgs):>6} imágenes")
@@ -46,6 +42,9 @@ def contar_dataset(raw: Path):
 def mostrar_muestras(conteo, split="train", n=4):
     """
     Muestra n imágenes 'real' y n 'fake' lado a lado.
+
+    Conteo es el dict que devuelve contar_dataset
+    Las imágenes son del split q se especifique.
     """
     fig, axes = plt.subplots(2, n, figsize=(3*n, 6))
     for fila, clase in enumerate(CLASES):
@@ -62,8 +61,10 @@ def mostrar_muestras(conteo, split="train", n=4):
 def balance_clases(conteo):
     """
     Imprime la proporción real/fake en cada split.
+
+    Conteo es el dict que devuelve contar_dataset.
     """
-    for split in SPLITS:
+    for split in RAW_SPLITS:
         n_real = len(conteo[(split, "real")])
         n_fake = len(conteo[(split, "fake")])
         tot = n_real + n_fake
@@ -77,7 +78,8 @@ def balance_clases(conteo):
 def muestrear_dimensiones(paths, n=200):
     """
     Cuenta los tamaños (ancho, alto) sobre una muestra de imágenes.
-    Muestreamos porque abrir todas sería lentísimo con 52 GB.
+    Muestreo porque abrir todas sería lentísimo con el dataset
+    de 52 GB.
     """
     muestra = random.sample(paths, min(n, len(paths)))
     dims = defaultdict(int)

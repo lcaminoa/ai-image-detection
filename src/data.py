@@ -101,7 +101,21 @@ def preprocess_dataset(processed: Path = DATA_PROC, splits_csv: Path = SPLITS_CS
         except Exception as e:
             print(f"\nSkip imagen corrupta: {src.name} ({e})")
 
-    print(f"Listo. {total} imágenes guardadas en {processed}")
+    # Elimina del CSV las entradas que no tienen archivo procesado
+    # (imágenes corruptas que fueron skipeadas arriba)
+    df["_dst"] = df.apply(
+        lambda r: processed / r["split"] / r["label"] / (Path(r["path"]).stem + ".jpg"), axis=1
+    )
+    validas = df["_dst"].apply(lambda p: p.exists())
+    n_corruptas = (~validas).sum()
+    if n_corruptas:
+        df = df[validas].drop(columns="_dst")
+        df.to_csv(splits_csv, index=False)
+        print(f"Se eliminaron {n_corruptas} imágenes corruptas del CSV.")
+    else:
+        df = df.drop(columns="_dst")
+
+    print(f"Listo. {len(df)} imágenes en {processed}")
 
 
 # ---------------------------------------------------------------------------

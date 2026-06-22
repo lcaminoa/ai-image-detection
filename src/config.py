@@ -11,9 +11,18 @@ ROOT = Path(__file__).parent.parent
 DATA_RAW = ROOT / "data" / "raw"
 DATA_PROC = ROOT / "data" / "processed"
 SPLITS_CSV = ROOT / "data" / "splits.csv"
+OUTPUTS = ROOT / "outputs"
 
 IMG_SIZE = 128
 IMG_CHANNELS = 3
+PCA_N_COMPONENTS = 356  # componentes para 90% de varianza explicada (muestra 5k imgs)
 
 VAL_RATIO = 0.2
-SEED = 42
+SEED = 26
+
+# Entrenamiento
+BATCH_SIZE   = 128
+LR           = 1e-3
+WEIGHT_DECAY = 1e-4
+NUM_EPOCHS   = 50
+PATIENCE     = 10

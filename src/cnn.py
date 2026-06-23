@@ -95,7 +95,8 @@ def train_cnn() -> dict:
     Misma lógica de early stopping que el MLP para comparación justa.
     """
     OUTPUTS.mkdir(exist_ok=True)
-    device = torch.device("mps" if torch.backends.mps.is_available() else "cpu")
+    # Prioriza GPU: MPS (Apple Silicon) > CUDA (NVIDIA) > CPU
+    device = torch.device("mps" if torch.backends.mps.is_available() else "cuda" if torch.cuda.is_available() else "cpu")
     print(f"Dispositivo: {device}")
 
     # ImageDataset carga imágenes desde processed/ y aplica las transforms del split

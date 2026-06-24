@@ -55,7 +55,7 @@ Image.MAX_IMAGE_PIXELS = 200_000_000
 # =============================================================================
 
 # Configuración de imágenes
-IMG_SIZE     = 128  # todas las imágenes se redimensionan a este tamaño (cuadradas)
+IMG_SIZE     = 224  # todas las imágenes se redimensionan a este tamaño (cuadradas)
 IMG_CHANNELS = 3    # RGB - el color es señal clave para distinguir real de IA
 
 # Split del dataset: 80% train / 10% val / 10% test

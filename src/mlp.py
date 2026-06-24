@@ -2,7 +2,7 @@
 MLP para clasificación binaria real vs. generado por IA.
 
 El MLP no trabaja sobre píxeles crudos sino sobre componentes de PCA.
-Esto reduce la dimensionalidad de 49152 (128x128x3) a aprox 350 features,
+Esto reduce la dimensionalidad de 150528 (224x224x3) a aprox 350 features,
 haciendo el entrenamiento viable y reduciendo overfitting.
 """
 

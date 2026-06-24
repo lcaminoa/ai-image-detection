@@ -76,9 +76,7 @@ def preprocess_dataset(processed: Path = DATA_PROC, splits_csv: Path = SPLITS_CS
     Redimensiona todas las imágenes a img_size x img_size y las guarda en processed/.
 
     Se hace una sola vez: las imágenes procesadas son mucho más pequeñas que las
-    originales (128x128 vs hasta 6000x4000), acelerando muchísimo el entrenamiento.
-    La función es idempotente: si se interrumpe y se vuelve a correr, retoma
-    desde donde quedó gracias al 'if dst.exists(): continue'.
+    originales (224x224 vs hasta 6000x4000), acelerando muchísimo el entrenamiento.
     """
     df = pd.read_csv(splits_csv)
     total = len(df)
@@ -91,7 +89,7 @@ def preprocess_dataset(processed: Path = DATA_PROC, splits_csv: Path = SPLITS_CS
         dst.parent.mkdir(parents=True, exist_ok=True)
 
         if dst.exists():
-            continue  # Ya procesada en una corrida anterior
+            continue # Ya procesada en una corrida anterior
 
         try:
             with Image.open(src) as img:
@@ -127,7 +125,7 @@ def get_transforms(split: str):
     Devuelve las transformaciones de torchvision para el split indicado.
 
     - train: augmentation liviana (flip, rotación, brillo) + normalización ImageNet.
-      El augmentation se aplica on-the-fly para que cada epoch vea variantes distintas.
+      El augmentation se aplica en el momento para que cada epoch vea variantes distintas.
     - val / test: solo normalización. No se augmenta para que las métricas sean estables.
     """
     from torchvision import transforms  # importado acá adentro y no al principio del archivo para que

@@ -94,7 +94,7 @@ def preprocess_dataset(processed: Path = DATA_PROC, splits_csv: Path = SPLITS_CS
         try:
             with Image.open(src) as img:
                 img = img.convert("RGB") # normaliza paletas, RGBA, etc.
-                img = img.resize((img_size, img_size), Image.LANCZOS) # LANCZOS = mejor calidad al reducir
+                img = img.resize((img_size, img_size), Image.Resampling.LANCZOS) # LANCZOS = mejor calidad al reducir
                 img.save(dst, format="JPEG", quality=95)
         except Exception as e:
             print(f"\nSkip imagen corrupta: {src.name} ({e})")

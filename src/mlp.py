@@ -2,10 +2,11 @@
 MLP para clasificación binaria real vs. generado por IA.
 
 El MLP no trabaja sobre píxeles crudos sino sobre componentes de PCA.
-Esto reduce la dimensionalidad de 150528 (224x224x3) a aprox 350 features,
-haciendo el entrenamiento viable y reduciendo overfitting.
+Las imágenes se cargan a 128x128x3 (49 152 features) y se comprimen con PCA
+a aprox 350-500 componentes, haciendo el entrenamiento viable en RAM.
 """
 
+import sys
 import joblib
 import numpy as np
 import torch
@@ -18,7 +19,7 @@ import matplotlib.pyplot as plt
 from src.config import (
     DATA_PROC, OUTPUTS,
     BATCH_SIZE, LR, WEIGHT_DECAY, NUM_EPOCHS, PATIENCE, SEED,
-    CLASES, LABEL_TO_INT,
+    CLASES, LABEL_TO_INT, MLP_IMG_SIZE,
 )
 
 torch.manual_seed(SEED)
@@ -76,9 +77,12 @@ def _cargar_split_pca(split: str, pca) -> tuple[torch.Tensor, torch.Tensor]:
             labels.append(LABEL_TO_INT[label])
 
     filas = []
-    for p in tqdm(paths, desc=f"Cargando {split}", leave=False):
+    for p in tqdm(paths, desc=f"Cargando {split}", leave=False, file=sys.stdout):
         with Image.open(p) as img:
-            # uint8 para ahorrar memoria; pca.transform() convierte a float internamente
+            # Redimensiona a MLP_IMG_SIZE (128x128) antes de aplanar.
+            # Las imágenes en processed/ están a 224x224 para la CNN, pero el MLP
+            # necesita menos resolución para no reventar la RAM con el stack numpy.
+            img = img.resize((MLP_IMG_SIZE, MLP_IMG_SIZE))
             filas.append(np.array(img, dtype=np.uint8).flatten())
 
     X = pca.transform(np.stack(filas)).astype(np.float32) # (N, PCA_N_COMPONENTS)
@@ -154,7 +158,7 @@ def train_mlp() -> dict:
         historia["val_loss"].append(val_loss)
         historia["val_acc"].append(val_acc)
 
-        print(f"Epoch {epoch:3d}/{NUM_EPOCHS}  train_loss={train_loss:.4f}  val_loss={val_loss:.4f}  val_acc={val_acc:.4f}")
+        print(f"Epoch {epoch:3d}/{NUM_EPOCHS}  train_loss={train_loss:.4f}  val_loss={val_loss:.4f}  val_acc={val_acc:.4f}", flush=True)
 
         # — Early stopping y checkpoint —
         if val_loss < mejor_val_loss:

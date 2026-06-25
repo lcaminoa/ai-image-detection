@@ -5,6 +5,7 @@ data/raw/*
 !data/raw/.gitkeep
 data/processed/*
 !data/processed/.gitkeep
-outputs/
+outputs/*
+!outputs/*.pt
 **/__pycache__/
 **/.DS_Store

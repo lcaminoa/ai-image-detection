@@ -1,0 +1,12 @@
+torch==2.12.1
+torchvision==0.27.1
+numpy==2.4.2
+pandas==3.0.1
+matplotlib==3.10.8
+seaborn==0.13.2
+scikit-learn==1.9.0
+scipy==1.17.1
+Pillow==12.1.1
+joblib==1.5.3
+tqdm==4.68.2
+ipywidgets==8.1.7

@@ -85,9 +85,7 @@ class CNN(nn.Module):
         return self.classifier(self.features(x))
 
 
-# ---------------------------------------------------------------------------
-# Entrenamiento
-# ---------------------------------------------------------------------------
+# === Entrenamiento ===
 
 def train_cnn() -> dict:
     """
@@ -135,7 +133,7 @@ def train_cnn() -> dict:
                 labels = labels.float().unsqueeze(1).to(device)
                 preds  = model(imgs)
                 val_loss += criterion(preds, labels).item() * len(imgs)
-                # Sigmoid convierte logit a probabilidad, umbral 0.5 para clasificación binaria
+                # Sigmoid pasa el logit a probabilidad, umbral 0.5 para clasificación binaria
                 correct  += ((preds.sigmoid() >= 0.5) == labels).sum().item()
         val_loss /= len(val_loader.dataset)
         val_acc = correct / len(val_loader.dataset)

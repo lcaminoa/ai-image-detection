@@ -22,7 +22,7 @@ Se comparan cuatro modelos de clasificación binaria para distinguir imágenes r
 ## Estructura del proyecto
 
 ```
-PF_ML_Krinisky_Caminoa/
+ai-image-detection/
 ├── data/
 │   ├── raw/              # imágenes originales del dataset (no versionado)
 │   ├── processed/        # imágenes redimensionadas a 224x224 (no versionado)
@@ -56,8 +56,8 @@ PF_ML_Krinisky_Caminoa/
 Se requiere Python 3.10 o superior.
 
 ```bash
-git clone <url-del-repositorio>
-cd PF_ML_Krinisky_Caminoa
+git clone https://github.com/lcaminoa/ai-image-detection.git
+cd ai-image-detection
 pip install -r requirements.txt
 ```
 

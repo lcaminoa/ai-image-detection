@@ -181,5 +181,4 @@ def _plot_curvas(historial: dict) -> None:
     ax2.grid(True)
 
     plt.tight_layout()
-    plt.savefig(OUTPUTS / "cnn_curvas.png", dpi=150)
     plt.show()

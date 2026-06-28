@@ -178,7 +178,7 @@ def train_mlp() -> dict:
 
 def _plot_curvas(historia: dict) -> None:
     """
-    Grafica loss y accuracy por epoch y guarda la figura en outputs/.
+    Grafica loss y accuracy por epoch.
     """
     epochs = range(1, len(historia["train_loss"]) + 1)
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 4))
@@ -197,5 +197,4 @@ def _plot_curvas(historia: dict) -> None:
     ax2.grid(True)
 
     plt.tight_layout()
-    plt.savefig(OUTPUTS / "mlp_curvas.png", dpi=150)
     plt.show()

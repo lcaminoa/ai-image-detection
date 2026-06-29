@@ -25,9 +25,9 @@ from src.config import (
 torch.manual_seed(SEED)
 
 
-# ---------------------------------------------------------------------------
-# Arquitectura del MLP
-# ---------------------------------------------------------------------------
+
+# == Arquitectura del MLP ==
+
 
 class MLP(nn.Module):
     """
@@ -51,16 +51,16 @@ class MLP(nn.Module):
             nn.Linear(512, 256),
             nn.ReLU(),
             nn.Dropout(dropout),
-            nn.Linear(256, 1), # Salida: logit (valor real, sin sigmoid)
+            nn.Linear(256, 1), # Salida -> logit (valor real, sin sigmoide)
         )
 
     def forward(self, x):
         return self.net(x)
 
 
-# ---------------------------------------------------------------------------
-# Carga de datos con PCA
-# ---------------------------------------------------------------------------
+
+# == Carga de datos con PCA ==
+
 
 def _cargar_split_pca(split: str, pca) -> tuple[torch.Tensor, torch.Tensor]:
     """
@@ -90,17 +90,16 @@ def _cargar_split_pca(split: str, pca) -> tuple[torch.Tensor, torch.Tensor]:
     return torch.from_numpy(X), torch.from_numpy(y).unsqueeze(1) # unsqueeze: hace (N,) -> (N,1)
 
 
-# ---------------------------------------------------------------------------
-# Entrenamiento
-# ---------------------------------------------------------------------------
+
+# == Entrenamiento ==
+
 
 def train_mlp() -> dict:
     """
     Entrena el MLP y devuelve el historial de métricas por epoch.
 
     Guarda el mejor modelo (el de menor val_loss) en outputs/mlp_best.pt.
-    Early stopping frena el entrenamiento si val_loss no mejora en PATIENCE epochs,
-    evitando overfitting sin necesidad de definir NUM_EPOCHS exacto de antemano.
+    Early stopping frena el entrenamiento si val_loss no mejora en PATIENCE epochs.
     """
     OUTPUTS.mkdir(exist_ok=True)
 
@@ -108,8 +107,7 @@ def train_mlp() -> dict:
     device = torch.device("mps" if torch.backends.mps.is_available() else "cuda" if torch.cuda.is_available() else "cpu")
     print(f"Dispositivo: {device}")
 
-    # El PCA fue ajustado con whiten=True (componentes con varianza unitaria),
-    # lo que estabiliza el entrenamiento de la red
+    # El PCA fue ajustado con whiten=True (componentes con varianza unitaria), lo que estabiliza el entrenamiento de la red
     pca = joblib.load(OUTPUTS / "pca_mlp.joblib")
     X_train, y_train = _cargar_split_pca("train", pca)
     X_val, y_val = _cargar_split_pca("val", pca)
@@ -118,8 +116,6 @@ def train_mlp() -> dict:
     train_loader = DataLoader(TensorDataset(X_train, y_train), batch_size=BATCH_SIZE, shuffle=True)
     val_loader = DataLoader(TensorDataset(X_val, y_val), batch_size=BATCH_SIZE)
 
-    # input_dim desde el PCA cargado, no desde config, por si el número de componentes
-    # resultante difiere del estimado (depende de la muestra y de las imágenes procesadas)
     model = MLP(input_dim=pca.n_components_).to(device)
     criterion = nn.BCEWithLogitsLoss() # Más estable que Sigmoid + BCELoss
     optimizer = torch.optim.Adam(model.parameters(), lr=LR, weight_decay=WEIGHT_DECAY)
@@ -129,7 +125,7 @@ def train_mlp() -> dict:
     epochs_sin_mejora = 0
 
     for epoch in range(1, NUM_EPOCHS + 1):
-        # — Fase de train —
+        # = Training =
         model.train() # El modo train activa Dropout
         train_loss = 0.0
         for X_batch, y_batch in train_loader:
@@ -141,15 +137,15 @@ def train_mlp() -> dict:
             train_loss += loss.item() * len(X_batch)
         train_loss /= len(X_train) # Promedio ponderado por tamaño de batch
 
-        # — Fase de validation —
+        # = Validation =
         model.eval() # Desactiva Dropout para evaluación determinista
         val_loss, correct = 0.0, 0
-        with torch.no_grad(): # Sin gradientes: ahorra memoria y acelera
+        with torch.no_grad(): # Desactivar gradientes
             for X_batch, y_batch in val_loader:
                 X_batch, y_batch = X_batch.to(device), y_batch.to(device)
-                preds     = model(X_batch)
+                preds = model(X_batch)
                 val_loss += criterion(preds, y_batch).item() * len(X_batch)
-                # Sigmoid convierte logit a probabilidad para comparar con umbral 0.5
+                # Sigmoide convierte logit a probabilidad para comparar con umbral 0.5
                 correct  += ((preds.sigmoid() >= 0.5) == y_batch).sum().item()
         val_loss /= len(X_val)
         val_acc = correct / len(X_val)
@@ -160,7 +156,7 @@ def train_mlp() -> dict:
 
         print(f"Epoch {epoch:3d}/{NUM_EPOCHS}  train_loss={train_loss:.4f}  val_loss={val_loss:.4f}  val_acc={val_acc:.4f}", flush=True)
 
-        # — Early stopping y checkpoint —
+        # = Early stopping y guardado =
         if val_loss < mejor_val_loss:
             mejor_val_loss    = val_loss
             epochs_sin_mejora = 0

@@ -3,9 +3,9 @@ Transfer learning con ResNet50 preentrenado en ImageNet.
 
 Dos estrategias:
   1. Feature extraction (build_feature_extractor): backbone congelado, solo fc entrenable.
-     Checkpoint: outputs/fe_best.pt
+        Guardado en outputs/fe_best.pt
   2. Fine-tuning (build_fine_tuner): layer4 + fc descongelados con LR chico.
-     Checkpoint: outputs/ft_best.pt
+        Guardado en outputs/ft_best.pt
 """
 
 import torch
@@ -35,7 +35,7 @@ def build_feature_extractor() -> nn.Module:
     """
     model = models.resnet50(weights=ResNet50_Weights.IMAGENET1K_V2)
 
-    for param in model.parameters():
+    for param in model.parameters(): # Congelamiento de backbone
         param.requires_grad = False
 
     # Reemplaza el clasificador original (2048 -> 1000 clases ImageNet)
@@ -47,13 +47,13 @@ def build_feature_extractor() -> nn.Module:
 
 def build_fine_tuner() -> nn.Module:
     """
-    ResNet50 con layer4 + clasificador descongelados.
+    ResNet50 con layer 4 + clasificador descongelados.
 
-    Las primeras capas (layer1-3) detectan features genéricos que transfieren
-    bien. Solo descongelamos layer4 (la más profunda) para que se adapte a los
-    artefactos de imágenes IA sin destruir los features base.
+    Las primeras capas (layer 1-3) detectan features genéricos que transfieren
+    bien. Solo el layer 4 es descongelado para que se adapte al problema propio
+    de detección de imágenes generadas con IA preservando los features base aprendidos por ImagenNet.
 
-    Parámetros entrenables: aprox 15M (layer4 ~14.9M + fc ~2049)
+    Parámetros entrenables: aprox 15M (layer 4 ~14.9M + fc ~2049)
     """
     model = models.resnet50(weights=ResNet50_Weights.IMAGENET1K_V2)
 
@@ -72,14 +72,14 @@ def build_fine_tuner() -> nn.Module:
 
 def train_transfer(model: nn.Module, save_name: str, lr: float = LR) -> dict:
     """
-    Loop de entrenamiento genérico para feature extraction y fine-tuning.
+    Loop de entrenamiento para feature extraction y fine-tuning.
 
-    Args:
+    Parámetros:
         model: construido con build_feature_extractor() o build_fine_tuner()
-        save_name: prefijo para el checkpoint ("fe" o "ft"). Guarda outputs/{save_name}_best.pt
+        save_name: prefijo para el guardado ("fe" o "ft"). Guarda outputs/{save_name}_best.pt
         lr: usar LR (1e-3) para feature extraction, 1e-4 para fine-tuning
 
-    Returns:
+    Retorna:
         dict con listas "train_loss", "val_loss", "val_acc" por epoch.
     """
     OUTPUTS.mkdir(exist_ok=True)
@@ -102,7 +102,7 @@ def train_transfer(model: nn.Module, save_name: str, lr: float = LR) -> dict:
     epochs_sin_mejora = 0
 
     for epoch in range(1, NUM_EPOCHS + 1):
-        # — Train —
+        # = Train =
         model.train()
         train_loss = 0.0
         for imgs, labels in train_loader:
@@ -115,7 +115,7 @@ def train_transfer(model: nn.Module, save_name: str, lr: float = LR) -> dict:
             train_loss += loss.item() * len(imgs)
         train_loss /= len(train_loader.dataset)
 
-        # — Validation —
+        # = Validation =
         model.eval()
         val_loss, correct = 0.0, 0
         with torch.no_grad():
@@ -134,7 +134,7 @@ def train_transfer(model: nn.Module, save_name: str, lr: float = LR) -> dict:
 
         print(f"Epoch {epoch:3d}/{NUM_EPOCHS}  train_loss={train_loss:.4f}  val_loss={val_loss:.4f}  val_acc={val_acc:.4f}", flush=True)
 
-        # — Early stopping y checkpoint —
+        # = Early stopping y Guardado =
         if val_loss < mejor_val_loss:
             mejor_val_loss = val_loss
             epochs_sin_mejora = 0

@@ -1,0 +1,8 @@
+MLP:
+
+    Si usáramos Sigmoid + BCELoss por separado, el gradiente se anula cuando
+    la salida está muy cerca de 0 o 1 (vanishing gradient).
+
+    Usa Dropout en capas ocultas para regularizar: en cada paso apaga
+    neuronas random, forzando a la red a no depender de features específicas.
+

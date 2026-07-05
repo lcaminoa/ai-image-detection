@@ -99,7 +99,7 @@ def train_cnn() -> dict:
     print(f"Dispositivo: {device}")
 
     # ImageDataset carga imágenes desde processed/ y aplica las transforms del split
-    train_loader = DataLoader(ImageDataset("train"), batch_size=BATCH_SIZE, shuffle=True,  num_workers=0)
+    train_loader = DataLoader(ImageDataset("train"), batch_size=BATCH_SIZE, shuffle=True, num_workers=0)
     val_loader = DataLoader(ImageDataset("val"), batch_size=BATCH_SIZE, shuffle=False, num_workers=0)
 
     model = CNN().to(device)
@@ -131,10 +131,10 @@ def train_cnn() -> dict:
             for imgs, labels in val_loader:
                 imgs = imgs.to(device)
                 labels = labels.float().unsqueeze(1).to(device)
-                preds  = model(imgs)
+                preds = model(imgs)
                 val_loss += criterion(preds, labels).item() * len(imgs)
                 # Sigmoid pasa el logit a probabilidad, umbral 0.5 para clasificación binaria
-                correct  += ((preds.sigmoid() >= 0.5) == labels).sum().item()
+                correct += ((preds.sigmoid() >= 0.5) == labels).sum().item()
         val_loss /= len(val_loader.dataset)
         val_acc = correct / len(val_loader.dataset)
 

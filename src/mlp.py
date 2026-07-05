@@ -146,7 +146,7 @@ def train_mlp() -> dict:
                 preds = model(X_batch)
                 val_loss += criterion(preds, y_batch).item() * len(X_batch)
                 # Sigmoide convierte logit a probabilidad para comparar con umbral 0.5
-                correct  += ((preds.sigmoid() >= 0.5) == y_batch).sum().item()
+                correct += ((preds.sigmoid() >= 0.5) == y_batch).sum().item()
         val_loss /= len(X_val)
         val_acc = correct / len(X_val)
 
@@ -158,7 +158,7 @@ def train_mlp() -> dict:
 
         # = Early stopping y guardado =
         if val_loss < mejor_val_loss:
-            mejor_val_loss    = val_loss
+            mejor_val_loss = val_loss
             epochs_sin_mejora = 0
             torch.save(model.state_dict(), OUTPUTS / "mlp_best.pt") # Guarda solo pesos, no arquitectura
         else:

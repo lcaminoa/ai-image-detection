@@ -86,7 +86,7 @@ def train_transfer(model: nn.Module, save_name: str, lr: float = LR) -> dict:
     device = torch.device("mps" if torch.backends.mps.is_available() else "cuda" if torch.cuda.is_available() else "cpu")
     print(f"Dispositivo: {device}")
 
-    train_loader = DataLoader(ImageDataset("train"), batch_size=BATCH_SIZE, shuffle=True,  num_workers=0)
+    train_loader = DataLoader(ImageDataset("train"), batch_size=BATCH_SIZE, shuffle=True, num_workers=0)
     val_loader = DataLoader(ImageDataset("val"), batch_size=BATCH_SIZE, shuffle=False, num_workers=0)
 
     model = model.to(device)

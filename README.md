@@ -2,6 +2,8 @@
 
 Se desarrollan y comparan cinco modelos de clasificación binaria para distinguir imágenes reales de imágenes generadas por inteligencia artificial: un MLP con reducción PCA, una CNN entrenada desde cero, ResNet50 con dos estrategias de transfer learning (Feature Extraction y Fine-Tuning), y un quinto modelo de fine-tuning incremental orientado a la adaptación de dominio sobre imágenes de redes sociales.
 
+**Demo interactiva:** [panchokrinisky.github.io/web-ai-image-detection](https://panchokrinisky.github.io/web-ai-image-detection/) — subí una imagen y el modelo te dice si es real o generada por IA.
+
 **Dataset principal:** [AI-Generated Images vs Real Images](https://www.kaggle.com/datasets/tristanzhang32/ai-generated-images-vs-real-images/data) - Kaggle
 
 **Dataset de adaptación:** [itw-sm](https://huggingface.co/datasets/dkarageo/itw-sm) - HuggingFace (imágenes de Facebook, X, Instagram y LinkedIn)
@@ -131,6 +133,13 @@ Correr los notebooks en orden:
 ## Nota sobre `pca_mlp.joblib`
 
 Este archivo (aprox. 127 MB) supera el límite de tamaño de GitHub y no está versionado. Es necesario generarlo corriendo `02_MLP.ipynb` antes de usar el MLP en los notebooks de resultados o predicción.
+
+---
+
+## Repositorios
+
+- [PF_ML_Krinisky_Caminoa](https://github.com/lcaminoa/ai-image-detection) — modelos y notebooks (este repositorio)
+- [web-ai-image-detection](https://github.com/panchokrinisky/web-ai-image-detection) — código de la demo interactiva
 
 ---
 

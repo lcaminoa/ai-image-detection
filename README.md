@@ -2,7 +2,7 @@
 
 Se desarrollan y comparan cinco modelos de clasificación binaria para distinguir imágenes reales de imágenes generadas por inteligencia artificial: un MLP con reducción PCA, una CNN entrenada desde cero, ResNet50 con dos estrategias de transfer learning (Feature Extraction y Fine-Tuning), y un quinto modelo de fine-tuning incremental orientado a la adaptación de dominio sobre imágenes de redes sociales.
 
-**Demo interactiva:** [panchokrinisky.github.io/web-ai-image-detection](https://panchokrinisky.github.io/web-ai-image-detection/) — subí una imagen y el modelo te dice si es real o generada por IA.
+**Demo interactiva:** [panchokrinisky.github.io/web-ai-image-detection](https://panchokrinisky.github.io/web-ai-image-detection/) - subí una imagen y el modelo te dice si es real o generada por IA.
 
 **Dataset principal:** [AI-Generated Images vs Real Images](https://www.kaggle.com/datasets/tristanzhang32/ai-generated-images-vs-real-images/data) - Kaggle
 

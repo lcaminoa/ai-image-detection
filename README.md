@@ -58,6 +58,7 @@ PF_ML_Krinisky_Caminoa/
 ├── src/
 │   ├── config.py         # rutas, constantes e hiperparámetros centralizados
 │   ├── data.py           # splits, preprocesamiento y Dataset de PyTorch
+│   ├── exploracion.py    # funciones auxiliares para el EDA (conteo, visualización, dimensiones)
 │   ├── mlp.py            # arquitectura y entrenamiento del MLP
 │   ├── cnn.py            # arquitectura y entrenamiento de la CNN
 │   └── transfer.py       # construcción y entrenamiento de modelos ResNet50

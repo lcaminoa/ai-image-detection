@@ -10,8 +10,3 @@ outputs/*
 !outputs/*.png
 **/__pycache__/
 **/.DS_Store
-
-# Entorno virtual y logs temporales (no versionar)
-venv/
-*.log
-notebooks/*.executed.ipynb

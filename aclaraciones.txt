@@ -1,8 +1,0 @@
-Se normalizo asi para que cuando se haga trasnfer learning con algun modelo de imageNet este todo en la misma escala
-
-PAra el PCA de el MLP se utilizo una muestra de 5000 ya que este modelo ya sabemos teoricamente que no vaa. funcionar
-porque las features (los pixeles y canales de color), al no estar relacionados espacialmente usando MLP no va a ser mejor que CNN
-
-
-En mlp.py: Redimensiona a MLP_IMG_SIZE (128x128) antes de aplanar. Las imágenes en processed/ están a 224x224 para la CNN, pero
-el MLP necesita menos resolución para no reventar la RAM con el stack numpy.

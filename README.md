@@ -45,8 +45,9 @@ PF_ML_Krinisky_Caminoa/
 │   ├── 03_CNN.ipynb                  # entrenamiento CNN
 │   ├── 04_transfer_learning.ipynb    # feature extraction y fine-tuning con ResNet50
 │   ├── 05_results.ipynb              # evaluación y comparación de los cuatro modelos base
-│   ├── 06_domain_adaptation.ipynb    # fine-tuning incremental sobre imágenes de redes sociales
-│   ├── 07_prediccion_imagen_propia.ipynb  # predicción de los cinco modelos sobre una imagen propia
+│   ├── 06_generalizacion_itwsm.ipynb # evaluación de los modelos base sobre imágenes de redes sociales
+│   ├── 07_domain_adaptation.ipynb    # fine-tuning incremental sobre imágenes de redes sociales
+│   ├── 08_prediccion_imagen_propia.ipynb  # predicción de los cinco modelos sobre una imagen propia
 │   └── imgs/                         # carpeta para colocar la imagen a predecir
 ├── outputs/
 │   ├── mlp_best.pt       # pesos del mejor MLP
@@ -98,7 +99,7 @@ El preprocesamiento (generación de `splits.csv` y redimensionado a 224x224) se 
 
 ### Dataset de adaptación (itw-sm)
 
-El dataset `itw-sm` utilizado en `06_domain_adaptation.ipynb` requiere solicitar acceso a sus autores desde [HuggingFace](https://huggingface.co/datasets/dkarageo/itw-sm). Una vez aprobado el acceso, se descarga automáticamente al correr el notebook.
+El dataset `itw-sm` utilizado en los notebooks 06 y 07 requiere solicitar acceso a sus autores desde [HuggingFace](https://huggingface.co/datasets/dkarageo/itw-sm). Una vez aprobado el acceso, se descarga automáticamente al correr los notebooks.
 
 ---
 
@@ -110,8 +111,9 @@ Los pesos de los cinco modelos están incluidos en el repositorio dentro de `out
 
 Luego se pueden usar directamente:
 - `05_results.ipynb` - evaluación completa de los cuatro modelos base sobre el test set
-- `06_domain_adaptation.ipynb` - evaluación del modelo adaptado a redes sociales
-- `07_prediccion_imagen_propia.ipynb` - predicción de los cinco modelos sobre una imagen propia
+- `06_generalizacion_itwsm.ipynb` - evaluación de los modelos base sobre imágenes de redes sociales
+- `07_domain_adaptation.ipynb` - evaluación del modelo adaptado a redes sociales
+- `08_prediccion_imagen_propia.ipynb` - predicción de los cinco modelos sobre una imagen propia
 
 ### Entrenamiento completo desde cero
 
@@ -124,10 +126,11 @@ Correr los notebooks en orden:
 | 03 | `03_CNN.ipynb` | `outputs/cnn_best.pt` |
 | 04 | `04_transfer_learning.ipynb` | `outputs/fe_best.pt`, `outputs/ft_best.pt` |
 | 05 | `05_results.ipynb` | - (solo lectura) |
-| 06 | `06_domain_adaptation.ipynb` | `outputs/ft_adapted.pt` |
-| 07 | `07_prediccion_imagen_propia.ipynb` | - (solo lectura) |
+| 06 | `06_generalizacion_itwsm.ipynb` | - (solo lectura) |
+| 07 | `07_domain_adaptation.ipynb` | `outputs/ft_adapted.pt` |
+| 08 | `08_prediccion_imagen_propia.ipynb` | - (solo lectura) |
 
-> **GPU recomendada** para los notebooks 03, 04 y 06. El código detecta automáticamente MPS (Apple Silicon), CUDA (NVIDIA) o cae a CPU.
+> **GPU recomendada** para los notebooks 03, 04 y 07. El código detecta automáticamente MPS (Apple Silicon), CUDA (NVIDIA) o cae a CPU.
 
 ---
 

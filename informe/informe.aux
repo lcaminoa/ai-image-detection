@@ -1,0 +1,75 @@
+\relax 
+\providecommand \babel@aux [2]{\global \let \babel@toc \@gobbletwo }
+\@nameuse{bbl@beforestart}
+\catcode `"\active 
+\catcode `<\active 
+\catcode `>\active 
+\@nameuse{es@quoting}
+\citation{kaggle-dataset}
+\babel@aux{spanish}{}
+\@writefile{toc}{\contentsline {section}{\numberline {I}Introducción}{1}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Muestras del dataset principal: imágenes reales (fila superior) vs.\ generadas por IA (fila inferior).}}{1}{}\protected@file@percent }
+\newlabel{fig:muestras}{{1}{1}{}{figure.1}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {II}Conjunto de datos y características}{1}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-A}}Dataset principal}{1}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-B}}Preprocesamiento y aumento de datos}{1}{}\protected@file@percent }
+\citation{itwsm}
+\citation{batchnorm}
+\citation{resnet}
+\citation{imagenet}
+\citation{catastrophic}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Imágenes originales (arriba) y sus reconstrucciones desde las 321 componentes de PCA (abajo): la compresión al 90\% de la varianza preserva la estructura global.}}{2}{}\protected@file@percent }
+\newlabel{fig:pca-rec}{{2}{2}{}{figure.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-C}}Extracción de características para el MLP}{2}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-D}}Dataset de la extensión: itw-sm}{2}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {III}Metodología}{2}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-A}}MLP sobre componentes PCA}{2}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-B}}CNN entrenada desde cero}{2}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-C}}Transfer learning con ResNet50}{2}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-D}}Extensión: fine-tuning incremental (adaptación de dominio)}{2}{}\protected@file@percent }
+\citation{adam}
+\citation{pytorch}
+\citation{sklearn}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Muestras del dataset itw-sm: imágenes reales (fila superior) y generadas por IA (fila inferior) extraídas de redes sociales. El contenido cotidiano contrasta con los paisajes y el arte del dataset principal.}}{3}{}\protected@file@percent }
+\newlabel{fig:itwsm}{{3}{3}{}{figure.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-E}}Protocolo de entrenamiento}{3}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {IV}Experimentos, resultados y discusión}{3}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-A}}Selección de hiperparámetros}{3}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-B}}Métricas}{3}{}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {I}{\ignorespaces Métricas sobre el test set del dominio original}}{3}{}\protected@file@percent }
+\newlabel{tab:resultados}{{I}{3}{}{table.1}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Comparación de métricas por modelo sobre el test set.}}{3}{}\protected@file@percent }
+\newlabel{fig:comparacion}{{4}{3}{}{figure.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-C}}Resultados en el dominio original}{3}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Distribución de probabilidades predichas por el modelo FT sobre el test set, separada por clase verdadera.}}{4}{}\protected@file@percent }
+\newlabel{fig:probs-ft}{{5}{4}{}{figure.5}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Matriz de confusión del modelo FT sobre el test set.}}{4}{}\protected@file@percent }
+\newlabel{fig:confusion-ft}{{6}{4}{}{figure.6}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-D}}Umbral de clasificación óptimo}{4}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-E}}Sobreajuste}{4}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-F}}Análisis cualitativo de errores y domain shift}{4}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Curva ROC del modelo FT sobre validación, con el umbral óptimo según el índice de Youden.}}{4}{}\protected@file@percent }
+\newlabel{fig:roc}{{7}{4}{}{figure.7}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces Curvas de entrenamiento del fine-tuning de ResNet50: pérdida de train y validación (izquierda) y accuracy de validación (derecha). La divergencia entre curvas de pérdida a partir del epoch 2 evidencia el sobreajuste que el early stopping contiene.}}{4}{}\protected@file@percent }
+\newlabel{fig:curvas-ft}{{8}{4}{}{figure.8}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-G}}Extensión: adaptación de dominio}{4}{}\protected@file@percent }
+\bibcite{kaggle-dataset}{1}
+\bibcite{itwsm}{2}
+\bibcite{resnet}{3}
+\bibcite{imagenet}{4}
+\bibcite{catastrophic}{5}
+\bibcite{batchnorm}{6}
+\bibcite{adam}{7}
+\bibcite{pytorch}{8}
+\bibcite{sklearn}{9}
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces Ejemplos de imágenes del test set mal clasificadas por la CNN, con etiqueta verdadera y probabilidad predicha.}}{5}{}\protected@file@percent }
+\newlabel{fig:errores}{{9}{5}{}{figure.9}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces Fotografía real de una persona evaluada por los cuatro modelos: tres de ellos la clasifican erróneamente como generada por IA, evidenciando el domain shift.}}{5}{}\protected@file@percent }
+\newlabel{fig:selfie}{{10}{5}{}{figure.10}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {II}{\ignorespaces Efecto de la adaptación de dominio (accuracy / F1)}}{5}{}\protected@file@percent }
+\newlabel{tab:adaptacion}{{II}{5}{}{table.2}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces Curvas del fine-tuning incremental sobre itw-sm: pérdida de train y validación (izquierda) y accuracy de validación (derecha).}}{5}{}\protected@file@percent }
+\newlabel{fig:adaptacion}{{11}{5}{}{figure.11}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {V}Conclusión y trabajo futuro}{5}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{Referencias}{5}{}\protected@file@percent }
+\gdef \@abspage@last{5}

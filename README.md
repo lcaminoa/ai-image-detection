@@ -140,16 +140,9 @@ Este archivo (aprox. 127 MB) supera el límite de tamaño de GitHub y no está v
 
 ---
 
-## Repositorios
-
-- [PF_ML_Krinisky_Caminoa](https://github.com/lcaminoa/ai-image-detection) — modelos y notebooks (este repositorio)
-- [web-ai-image-detection](https://github.com/panchokrinisky/web-ai-image-detection) — código de la demo interactiva
-
----
-
 ## Autores
 
 - Lautaro Valentín Caminoa
 - Francisco Krinisky
 
-Universidad de San Andrés - Machine Learning (I302), 2026
+Universidad de San Andrés - Aprendizaje Automático y Aprendizaje Profundo, 2026

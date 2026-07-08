@@ -39,6 +39,10 @@ PF_ML_Krinisky_Caminoa/
 │   ├── raw/              # imágenes originales del dataset (no versionado)
 │   ├── processed/        # imágenes redimensionadas a 224x224 (no versionado)
 │   └── splits.csv        # asignación de cada imagen a train / val / test
+├── informe/
+│   ├── Caminoa_Krinisky_Informe_PF.pdf   # informe final
+│   ├── informe.tex                       # fuente LaTeX del informe
+│   └── figs/                             # figuras incluidas en el informe
 ├── notebooks/
 │   ├── 01_eda.ipynb                  # análisis exploratorio del dataset
 │   ├── 02_MLP.ipynb                  # PCA + entrenamiento MLP

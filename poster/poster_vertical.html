@@ -199,22 +199,23 @@
     flex: 1;
     background: #fff;
     border: 1px solid var(--line);
-    border-top: 2.2mm solid var(--fg);
     border-radius: 12px;
-    padding: 4mm 4.5mm;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
   }
-  .modelbox.c1 { border-top-color: var(--azul); }
-  .modelbox.c2 { border-top-color: var(--violeta); }
-  .modelbox.c3 { border-top-color: var(--magenta); }
-  .modelbox.c4 { border-top-color: var(--naranja); }
-  .modelbox.c5 {
-    border: 1px solid transparent;
-    border-top: 2.2mm solid transparent;
-    background:
-      linear-gradient(#fff, #fff) padding-box,
-      linear-gradient(90deg, #0071e3, #7c4dff, #e64980, #ff9500) border-box;
+  .modelbox h3 {
+    padding: 2.4mm 4.5mm 2.2mm;
+    color: #fff;
+    background: var(--fg);
   }
-  .modelbox h3 { font-size: 18.5pt; font-weight: 700; letter-spacing: -.02em; margin-bottom: 1.6mm; }
+  .modelbox p { padding: 2.6mm 4.5mm 3.4mm; }
+  .modelbox.c1 h3 { background: var(--azul); }
+  .modelbox.c2 h3 { background: var(--violeta); }
+  .modelbox.c3 h3 { background: var(--magenta); }
+  .modelbox.c4 h3 { background: var(--naranja); color: #1d1d1f; }
+  .modelbox.c5 h3 { background: linear-gradient(90deg, #0071e3, #7c4dff, #e64980); }
+  .modelbox h3 { font-size: 18.5pt; font-weight: 700; letter-spacing: -.02em; }
   .modelbox p { font-size: 15.5pt; line-height: 1.3; color: var(--muted); }
 
   /* ── Tablas ── */

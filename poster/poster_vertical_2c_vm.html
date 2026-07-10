@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<title>Póster vertical (verde y magenta) — Detección de imágenes generadas por IA</title>
+<style>
+  /* ── Tokens (mismos del poster original) ── */
+  :root {
+    --bg:      #ffffff;
+    --fg:      #000000;
+    --muted:   #48484d;
+    --line:    #d2d2d7;
+    --surface: #f5f5f7;
+    --radius:  20px;
+    --azul:    #2f9e44;
+    --naranja: #d6336c;
+    --sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
+            "Helvetica Neue", Helvetica, Arial, sans-serif;
+    --mono: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  /* ── Página A1 vertical ── */
+  @page { size: 594mm 841mm; margin: 0; }
+  html, body { width: 594mm; height: 841mm; overflow: hidden; }
+
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ════════ Cabecera ════════ */
+  header {
+    text-align: center;
+    padding: 5mm 30mm 3mm;
+  }
+  .chip {
+    display: inline-block;
+    font-size: 12pt;
+    font-weight: 500;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 980px;
+    padding: 2.2mm 7mm;
+    margin-bottom: 3.5mm;
+  }
+  h1 {
+    font-size: 56pt;
+    font-weight: 700;
+    letter-spacing: -0.045em;
+    line-height: 1.04;
+  }
+  .grad { color: var(--azul); }
+  .meta {
+    margin-top: 3mm;
+    font-size: 17pt;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  .meta .names { color: var(--fg); font-weight: 600; font-size: 30pt; }
+
+  /* barra de acento con la paleta */
+  .rainbow {
+    height: 1.6mm;
+    margin: 3mm 14mm 0;
+    border-radius: 980px;
+    background: var(--azul);
+  }
+
+  /* ════════ Cuerpo: una sola columna ════════ */
+  .stack {
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 5mm;
+    padding: 4.5mm 14mm 0;
+  }
+
+  .card {
+    background: var(--surface);
+    border-radius: var(--radius);
+    padding: 5.5mm 9.5mm;
+  }
+  .card h2 {
+    font-size: 29pt;
+    font-weight: 700;
+    letter-spacing: -.03em;
+    margin-bottom: 2.5mm;
+    display: flex;
+    align-items: center;
+    gap: 4mm;
+  }
+  .num-badge {
+    flex: none;
+    width: 12mm; height: 12mm;
+    border-radius: 3.5mm;
+    color: #fff;
+    font-size: 16pt;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    letter-spacing: 0;
+  }
+  .card p { font-size: 19pt; line-height: 1.36; letter-spacing: -.008em; }
+  .card p + p { margin-top: 2.5mm; }
+  .card strong { font-weight: 650; }
+  .card .muted { color: var(--muted); }
+
+  ul { list-style: none; margin-top: 2.5mm; }
+  li {
+    font-size: 19pt;
+    line-height: 1.36;
+    padding-left: 7.5mm;
+    position: relative;
+    margin-bottom: 2.4mm;
+  }
+  li::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 3.4mm;
+    width: 2.6mm; height: 2.6mm;
+    border-radius: 50%;
+    background: var(--fg);
+  }
+
+  /* ── Filas internas (texto + figura) ── */
+  .row {
+    display: flex;
+    gap: 9mm;
+    align-items: center;
+  }
+  .row > * { min-width: 0; }
+
+  /* ── Figuras ── */
+  figure { margin-top: 3mm; text-align: center; }
+  .imgbox {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 3mm;
+    display: inline-block;
+  }
+  .imgbox img { display: block; }
+  figcaption {
+    margin-top: 2mm;
+    font-size: 15pt;
+    color: var(--muted);
+    line-height: 1.35;
+  }
+
+  /* ── Tiras de muestras ── */
+  .strip-row {
+    display: flex;
+    align-items: center;
+    gap: 4mm;
+    margin-bottom: 2.5mm;
+  }
+  .strip-label {
+    width: 15mm;
+    flex: none;
+    text-align: right;
+    font-size: 14.5pt;
+    font-weight: 600;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .strip-row .imgbox { padding: 1.5mm; border-radius: 10px; }
+
+  /* ── Cajas de modelos (Metodología) ── */
+  .models {
+    display: flex;
+    gap: 5mm;
+    margin-top: 3.5mm;
+  }
+  .modelbox {
+    flex: 1;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .modelbox h3 {
+    padding: 2.4mm 4.5mm 2.2mm;
+    color: #fff;
+    background: var(--fg);
+  }
+  .modelbox p { padding: 2.6mm 4.5mm 3.4mm; }
+  .modelbox.c1 h3, .modelbox.c2 h3, .modelbox.c3 h3,
+  .modelbox.c4 h3, .modelbox.c5 h3 { background: var(--azul); }
+  .modelbox h3 { font-size: 18.5pt; font-weight: 700; letter-spacing: -.02em; }
+  .modelbox p { font-size: 15.5pt; line-height: 1.3; color: var(--muted); }
+
+  /* ── Tablas ── */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 3mm;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+  th, td {
+    font-size: 18.5pt;
+    text-align: left;
+    padding: 3mm 5mm;
+  }
+  th {
+    font-size: 14.5pt;
+    font-weight: 600;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    color: var(--muted);
+    border-bottom: 1px solid var(--line);
+  }
+  td { border-bottom: 1px solid var(--surface); }
+  tr:last-child td { border-bottom: none; }
+  td.num { font-variant-numeric: tabular-nums; }
+  .best { font-weight: 700; }
+
+  /* ── Selfie + predicciones ── */
+  .selfie-row {
+    display: flex;
+    align-items: center;
+    gap: 7mm;
+    margin-top: 3mm;
+    text-align: left;
+  }
+  .selfie-row .imgbox { flex: none; }
+  .selfie-preds { flex: 1; }
+  .pred {
+    display: flex;
+    align-items: baseline;
+    gap: 4mm;
+    padding: 2.6mm 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .pred:last-child { border-bottom: none; }
+  .pred:first-child { padding-top: 0; }
+  .pred-model { width: 44mm; flex: none; font-size: 18pt; font-weight: 650; }
+  .pred-out {
+    flex: 1;
+    font-family: var(--mono);
+    font-size: 16pt;
+    font-weight: 600;
+  }
+  .pred-out.real { color: var(--azul); }
+  .pred-out.ia   { color: #8d2247; }
+  .pred-p {
+    font-family: var(--mono);
+    font-size: 15pt;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ── Número grande ── */
+  .bignum {
+    text-align: center;
+    margin: 3mm 0 1.5mm;
+    font-weight: 700;
+    font-size: 40pt;
+    letter-spacing: -.04em;
+    line-height: 1;
+  }
+  .bignum .before { color: var(--muted); }
+  .bignum .arrow  { color: var(--muted); font-weight: 400; padding: 0 3mm; }
+  .bignum-cap {
+    text-align: center;
+    font-size: 15.5pt;
+    color: var(--muted);
+    margin-bottom: 1mm;
+  }
+
+  /* ── Conclusiones en grilla ── */
+  .concl {
+    display: flex;
+    gap: 5mm;
+    margin-top: 2mm;
+  }
+  .conclbox {
+    flex: 1;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 3mm 4.5mm;
+  }
+  .conclbox .cnum {
+    font-size: 21pt;
+    font-weight: 700;
+    letter-spacing: -.03em;
+    display: block;
+    margin-bottom: 1.6mm;
+  }
+  .conclbox:nth-child(1) .cnum { color: var(--azul); }
+  .conclbox:nth-child(2) .cnum { color: var(--azul); }
+  .conclbox:nth-child(3) .cnum { color: var(--azul); }
+  .conclbox p { font-size: 16pt; line-height: 1.32; }
+
+  /* ── Demo + QR ── */
+  .demo-row {
+    display: flex;
+    align-items: center;
+    gap: 8mm;
+    margin-top: 2mm;
+  }
+  .demo-row .demo-text { flex: 1; }
+  .qr {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 3.5mm;
+  }
+  .qr img { display: block; width: 42mm; height: 42mm; }
+  .qr-url {
+    text-align: center;
+    font-size: 13pt;
+    color: var(--muted);
+    margin-top: 2mm;
+    line-height: 1.3;
+  }
+  .try-pill {
+    display: inline-block;
+    background: var(--azul);
+    color: #fff;
+    font-size: 17.5pt;
+    font-weight: 500;
+    border-radius: 980px;
+    padding: 3.2mm 8mm;
+    margin-top: 2.5mm;
+    letter-spacing: -.01em;
+  }
+
+  /* ── Referencias ── */
+  .refs {
+    padding: 1.5mm 18mm 0;
+    font-size: 11.5pt;
+    color: var(--muted);
+    text-align: center;
+    line-height: 1.4;
+  }
+
+  /* ════════ Pie ════════ */
+  footer {
+    margin-top: 2.5mm;
+    border-top: 1px solid var(--line);
+    padding: 4mm 18mm 4.5mm;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14pt;
+    color: var(--muted);
+  }
+  footer strong {
+    color: var(--fg);
+    font-weight: 600;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: .5mm;
+  }
+</style>
+</head>
+<body>
+
+<!-- ════════ CABECERA ════════ -->
+<header>
+  <div class="chip">Proyecto Final · I302 Aprendizaje Automático y Aprendizaje Profundo</div>
+  <h1>Detección de imágenes <span class="grad">generadas por IA</span><br>con adaptación de dominio a redes sociales</h1>
+  <div class="meta">
+    <span class="names">Lautaro Valentín Caminoa &middot; Francisco Krinisky</span><br>
+    Universidad de San Andrés &nbsp;·&nbsp; lcaminoa@udesa.edu.ar &nbsp;·&nbsp; kfrancisco@udesa.edu.ar
+  </div>
+</header>
+<div class="rainbow"></div>
+
+<!-- ════════ CUERPO ════════ -->
+<div class="stack">
+
+  <div class="card">
+    <h2><span class="num-badge" style="background:var(--azul)">1</span>Motivación y datos</h2>
+    <div class="row">
+      <div style="flex:1">
+        <p>Los generadores de imágenes (Stable Diffusion, DALL-E, Midjourney) son cada vez más fotorrealistas, con impacto directo sobre la desinformación. <strong>Tarea:</strong> clasificación binaria de una imagen RGB (224×224): ¿<em>real</em> o <em>generada por IA</em>?</p>
+        <ul>
+          <li><strong>Dominio original</strong> (Kaggle): 60.000 imágenes balanceadas de paisajes, naturaleza y arte. Partición 80/10/10.</li>
+          <li><strong>Dominio nuevo</strong> (itw-sm): 10.000 imágenes de Facebook, X, Instagram y LinkedIn.</li>
+          <li><strong>Extensión:</strong> un detector con 93% de accuracy se vuelve inutilizable frente a fotos cotidianas, y lo recuperamos con <strong>domain adaptation</strong>.</li>
+        </ul>
+      </div>
+      <div style="flex:none; text-align:left">
+        <div class="strip-row"><span class="strip-label">Real</span><span class="imgbox"><img src="figs/fig_tira_dataset_real.png" style="height:21mm"></span></div>
+        <div class="strip-row"><span class="strip-label">IA</span><span class="imgbox"><img src="figs/fig_tira_dataset_ia.png" style="height:21mm"></span></div>
+        <div class="strip-row"><span class="strip-label">Real</span><span class="imgbox"><img src="figs/fig_tira_itwsm_real.png" style="height:16mm"></span></div>
+        <div class="strip-row"><span class="strip-label">IA</span><span class="imgbox"><img src="figs/fig_tira_itwsm_ia.png" style="height:16mm"></span></div>
+        <figcaption style="text-align:center">Arriba: dominio original (Kaggle). Abajo: itw-sm (redes sociales).</figcaption>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="num-badge" style="background:var(--azul)">2</span>Metodología</h2>
+    <p class="muted">Entrenados con BCEWithLogitsLoss, Adam y early stopping sobre la loss de validación.</p>
+    <div class="models">
+      <div class="modelbox c1">
+        <h3>MLP + PCA</h3>
+        <p>321 componentes (90% de varianza). <em>Baseline</em>.</p>
+      </div>
+      <div class="modelbox c2">
+        <h3>CNN</h3>
+        <p>4 bloques conv (32→256 filtros), 26M parámetros.</p>
+      </div>
+      <div class="modelbox c3">
+        <h3>ResNet50 FE</h3>
+        <p>Backbone congelado, solo 2.049 parámetros entrenables.</p>
+      </div>
+      <div class="modelbox c4">
+        <h3>ResNet50 FT</h3>
+        <p>Se descongela layer4 (~15M), LR 10<sup>-4</sup>.</p>
+      </div>
+      <div class="modelbox c5">
+        <h3>FT incremental</h3>
+        <p>Continúa FT sobre itw-sm con LR 10<sup>-5</sup> para mitigar el <em>catastrophic forgetting</em>.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="num-badge" style="background:var(--azul)">3</span>Resultados en el dominio original</h2>
+    <div class="row">
+      <div style="flex:1">
+        <table>
+          <tr><th>Modelo</th><th>Accuracy</th><th>F1</th></tr>
+          <tr><td>MLP + PCA</td><td class="num">0.724</td><td class="num">0.738</td></tr>
+          <tr><td>CNN</td><td class="num">0.884</td><td class="num">0.882</td></tr>
+          <tr><td>ResNet50 FE</td><td class="num">0.881</td><td class="num">0.881</td></tr>
+          <tr><td>ResNet50 FT</td><td class="num best">0.934</td><td class="num best">0.934</td></tr>
+        </table>
+        <p class="muted" style="font-size:14pt; margin-top:3mm">La estructura espacial importa (MLP muy por debajo) y los features de ImageNet dominan: fine-tuning alcanza 93.4% (AUC = 0.986).</p>
+      </div>
+      <figure style="flex:none; margin-top:0">
+        <span class="imgbox"><img src="figs/fig_comparacion_metricas_2h_vm.png" style="width:188mm"></span>
+      </figure>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="num-badge" style="background:var(--azul)">4</span>Domain shift</h2>
+    <div class="row">
+      <div style="flex:1">
+        <p>Una selfie real es clasificada como <em>generada por IA</em> por tres de los cuatro modelos:</p>
+        <div class="selfie-row">
+          <span class="imgbox"><img src="figs/fig_selfie.jpg" style="width:36mm"></span>
+          <div class="selfie-preds">
+            <div class="pred"><span class="pred-model">MLP</span><span class="pred-out real">Real</span><span class="pred-p">p = 0.41</span></div>
+            <div class="pred"><span class="pred-model">CNN</span><span class="pred-out ia">Generada por IA</span><span class="pred-p">p = 0.56</span></div>
+            <div class="pred"><span class="pred-model">Transfer FE</span><span class="pred-out ia">Generada por IA</span><span class="pred-p">p = 0.95</span></div>
+            <div class="pred"><span class="pred-model">Transfer FT</span><span class="pred-out ia">Generada por IA</span><span class="pred-p">p = 1.00</span></div>
+          </div>
+        </div>
+      </div>
+      <figure style="flex:none; margin-top:0">
+        <span class="imgbox"><img src="figs/fig_domain_gap_vm.png" style="width:182mm"></span>
+        <figcaption>Sobre 1.000 imágenes de itw-sm, ningún modelo base supera el 65%: la limitación<br>no es de la arquitectura sino del <strong>dominio de entrenamiento</strong>.</figcaption>
+      </figure>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="num-badge" style="background:var(--azul)">5</span>Domain adaptation</h2>
+    <div class="row">
+      <div style="flex:1">
+        <p>Partiendo del modelo FT, se continúa el entrenamiento sobre itw-sm con learning rate 10<sup>-5</sup>: el modelo incorpora el dominio nuevo modificando mínimamente sus pesos.</p>
+        <div class="bignum"><span class="before">62.5%</span><span class="arrow">→</span><span style="color:var(--azul)">94.5%</span></div>
+        <div class="bignum-cap">accuracy sobre fotos de redes sociales, antes y después de adaptar</div>
+        <figure>
+          <span class="imgbox"><img src="figs/fig_curvas_adaptacion_vm.png" style="width:160mm"></span>
+          <figcaption>Fine-tuning incremental sobre itw-sm: la loss de validación se estabiliza sin sobreajuste.</figcaption>
+        </figure>
+      </div>
+      <figure style="flex:none; margin-top:0">
+        <span class="imgbox"><img src="figs/fig_adaptacion_gap_vm.png" style="width:182mm"></span>
+        <figcaption>El modelo adaptado gana 32 puntos en itw-sm perdiendo solo 7 en el dominio original.</figcaption>
+      </figure>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="num-badge" style="background:var(--azul)">6</span>Conclusiones, demo y trabajo futuro</h2>
+    <div class="row">
+      <div style="flex:1">
+        <div class="concl">
+          <div class="conclbox">
+            <span class="cnum">01</span>
+            <p><strong>El transfer learning domina:</strong> adaptar solo layer4 de ResNet50 supera a una CNN entrenada desde cero con 48.000 imágenes.</p>
+          </div>
+          <div class="conclbox">
+            <span class="cnum">02</span>
+            <p><strong>El dominio importa tanto como la arquitectura:</strong> los cuatro modelos colapsan al azar fuera de distribución.</p>
+          </div>
+          <div class="conclbox">
+            <span class="cnum">03</span>
+            <p><strong>Adaptar es barato:</strong> un fine-tuning incremental con LR reducido gana 32 puntos perdiendo solo 7 en el original.</p>
+          </div>
+        </div>
+        <p style="margin-top:3.5mm; font-size:16.5pt" class="muted">Trabajo futuro: reentrenar con las imágenes subidas a la demo · arquitecturas modernas (ViT, ConvNeXt) · generadores más recientes.</p>
+        <span class="try-pill">Probá el modelo con tus propias fotos →</span>
+      </div>
+      <div style="flex:none">
+        <div class="qr"><img src="figs/qr_demo.png" alt="QR demo"></div>
+        <div class="qr-url">panchokrinisky.github.io/<br>web-ai-image-detection</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ════════ REFERENCIAS + PIE ════════ -->
+<div class="refs"><strong>Referencias:</strong> T. Zhang, “AI Generated Images vs Real Images”, Kaggle, 2024 &nbsp;·&nbsp; D. Karageorgiou et al., “itw-sm: In The Wild — Social Media”, HuggingFace, 2024 &nbsp;·&nbsp; K. He et al., “Deep Residual Learning for Image Recognition”, IEEE CVPR, 2016 &nbsp;·&nbsp; J. Deng et al., “ImageNet”, IEEE CVPR, 2009 &nbsp;·&nbsp; A. Paszke et al., “PyTorch”, NeurIPS, 2019.</div>
+<footer>
+  <span>Código, notebooks y modelos: <strong>github.com/lcaminoa/PF_ML_Krinisky_Caminoa</strong></span>
+  <span>AI Fest 2026 — Universidad de San Andrés</span>
+</footer>
+
+</body>
+</html>

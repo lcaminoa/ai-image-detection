@@ -57,6 +57,14 @@
     letter-spacing: -0.045em;
     line-height: 1.04;
   }
+  h1 .grad {
+    background: linear-gradient(90deg, #0071e3 0%, #7c4dff 38%, #e64980 72%, #ff9500 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
   .subtitle {
     margin-top: 4mm;
     font-size: 22pt;
@@ -82,12 +90,12 @@
     padding: 3mm 14mm 0;
     align-items: flex-start;
   }
-  .col { flex: 1; display: flex; flex-direction: column; gap: 9mm; }
+  .col { flex: 1; display: flex; flex-direction: column; gap: 8mm; }
 
   .card {
     background: var(--surface);
     border-radius: var(--radius);
-    padding: 8mm 9.5mm;
+    padding: 7mm 9.5mm;
   }
   .card h2 {
     font-size: 27pt;
@@ -132,6 +140,41 @@
     font-size: 14pt;
     color: var(--muted);
     line-height: 1.35;
+  }
+
+  /* ── Selfie + predicciones (sección Domain shift) ── */
+  .selfie-row {
+    display: flex;
+    align-items: center;
+    gap: 9mm;
+    margin-top: 4mm;
+    text-align: left;
+  }
+  .selfie-row .imgbox { flex: none; }
+  .selfie-preds { flex: 1; }
+  .pred {
+    display: flex;
+    align-items: baseline;
+    gap: 5mm;
+    padding: 2.8mm 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .pred:last-child { border-bottom: none; }
+  .pred:first-child { padding-top: 0; }
+  .pred-model { width: 46mm; flex: none; font-size: 18pt; font-weight: 650; }
+  .pred-out {
+    flex: 1;
+    font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+    font-size: 16pt;
+    font-weight: 600;
+  }
+  .pred-out.real { color: #0071e3; }
+  .pred-out.ia   { color: #c25e00; }
+  .pred-p {
+    font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+    font-size: 14.5pt;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
   }
 
   /* ── Tiras de muestras (sección Datos) ── */
@@ -184,9 +227,9 @@
   /* ── Número grande (62.5 → 94.5) ── */
   .bignum {
     text-align: center;
-    margin: 4mm 0 1.5mm;
+    margin: 3mm 0 1.5mm;
     font-weight: 700;
-    font-size: 56pt;
+    font-size: 50pt;
     letter-spacing: -.04em;
     line-height: 1;
   }
@@ -266,7 +309,7 @@
 <!-- ════════ CABECERA ════════ -->
 <header>
   <div class="chip">Proyecto Final · I302 Aprendizaje Automático y Aprendizaje Profundo</div>
-  <h1>Detección de imágenes generadas por IA<br>con adaptación de dominio a redes sociales</h1>
+  <h1>Detección de imágenes <span class="grad">generadas por IA</span><br>con adaptación de dominio a redes sociales</h1>
   <div class="meta">
     <span class="names">Lautaro Valentín Caminoa &middot; Francisco Krinisky</span><br>
     Universidad de San Andrés &nbsp;·&nbsp; lcaminoa@udesa.edu.ar &nbsp;·&nbsp; kfrancisco@udesa.edu.ar
@@ -343,12 +386,20 @@
       <h2>Domain shift</h2>
       <p>Una selfie real es clasificada como <em>generada por IA</em> por tres de los cuatro modelos:</p>
       <figure>
-        <span class="imgbox"><img src="figs/fig_prediccion_selfie_sin_titulo.png" style="width:228mm"></span>
-        <figcaption>Fotografía real evaluada por los cuatro modelos base.</figcaption>
+        <div class="selfie-row">
+          <span class="imgbox"><img src="figs/fig_selfie.jpg" style="width:44mm"></span>
+          <div class="selfie-preds">
+            <div class="pred"><span class="pred-model">MLP</span><span class="pred-out real">Real</span><span class="pred-p">p = 0.41</span></div>
+            <div class="pred"><span class="pred-model">CNN</span><span class="pred-out ia">Generada por IA</span><span class="pred-p">p = 0.56</span></div>
+            <div class="pred"><span class="pred-model">Transfer FE</span><span class="pred-out ia">Generada por IA</span><span class="pred-p">p = 0.95</span></div>
+            <div class="pred"><span class="pred-model">Transfer FT</span><span class="pred-out ia">Generada por IA</span><span class="pred-p">p = 1.00</span></div>
+          </div>
+        </div>
+        <figcaption>Fotografía real evaluada por los cuatro modelos base (p = probabilidad asignada a “generada por IA”).</figcaption>
       </figure>
       <p>Evaluados sobre 1.000 imágenes de itw-sm, <strong>los cuatro modelos caen cerca del azar</strong>: la limitación no es de la arquitectura sino del <strong>dominio de entrenamiento</strong> (las imágenes “reales” vistas en train son solo paisajes y arte).</p>
       <figure>
-        <span class="imgbox"><img src="figs/fig_domain_gap.png" style="width:196mm"></span>
+        <span class="imgbox"><img src="figs/fig_domain_gap.png" style="width:172mm"></span>
         <figcaption>Ninguno de los cuatro modelos base supera el 65% fuera de su dominio.</figcaption>
       </figure>
     </div>
@@ -358,21 +409,14 @@
       <p>Partiendo del modelo FT, se continúa el entrenamiento sobre itw-sm con learning rate 10<sup>-5</sup>: el modelo incorpora el dominio nuevo modificando mínimamente sus pesos.</p>
       <div class="bignum"><span class="before">62.5%</span><span class="arrow">→</span><span>94.5%</span></div>
       <div class="bignum-cap">accuracy sobre fotos de redes sociales, antes y después de adaptar</div>
-      <table>
-        <tr><th>Test set</th><th>FT original</th><th>FT adaptado</th></tr>
-        <tr><td>Dominio original</td><td class="num best">0.937</td><td class="num">0.867</td></tr>
-        <tr><td>itw-sm (redes sociales)</td><td class="num">0.625</td><td class="num best">0.945</td></tr>
-      </table>
-      <div class="demo-row" style="margin-top:4.5mm; align-items:flex-start">
-        <figure style="margin-top:0">
-          <span class="imgbox"><img src="figs/fig_curvas_adaptacion.png" style="width:196mm"></span>
-          <figcaption>Fine-tuning incremental sobre itw-sm: la loss de validación se estabiliza sin sobreajuste.</figcaption>
-        </figure>
-        <figure style="margin-top:0">
-          <span class="imgbox"><img src="figs/fig_prediccion_adaptado.png" style="width:50mm"></span>
-          <figcaption>La misma selfie, ahora clasificada <strong>real</strong>.</figcaption>
-        </figure>
-      </div>
+      <figure style="margin-top:4mm">
+        <span class="imgbox"><img src="figs/fig_adaptacion_gap.png" style="width:166mm"></span>
+        <figcaption>El modelo adaptado gana 32 puntos en itw-sm perdiendo solo 7 en el dominio original.</figcaption>
+      </figure>
+      <figure>
+        <span class="imgbox"><img src="figs/fig_curvas_adaptacion.png" style="width:172mm"></span>
+        <figcaption>Fine-tuning incremental sobre itw-sm: la loss de validación se estabiliza sin sobreajuste.</figcaption>
+      </figure>
     </div>
 
     <div class="card">

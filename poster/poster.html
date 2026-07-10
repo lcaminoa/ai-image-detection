@@ -355,7 +355,7 @@
       <p class="muted">Entrenados con BCEWithLogitsLoss, Adam y early stopping sobre la loss de validación.</p>
       <ul>
         <li><strong>MLP + PCA</strong> — 321 componentes (90% de varianza). <em>Baseline</em>.</li>
-        <li><strong>CNN desde cero</strong> — 4 bloques conv (32→256 filtros), 26M parámetros.</li>
+        <li><strong>CNN</strong> — 4 bloques conv (32→256 filtros), 26M parámetros.</li>
         <li><strong>ResNet50 Feature Extraction</strong> — backbone congelado, solo 2.049 parámetros entrenables.</li>
         <li><strong>ResNet50 Fine-Tuning (FT)</strong> — se descongela layer4 (~15M), LR 10<sup>-4</sup>.</li>
         <li><strong>FT incremental</strong> (extensión) — continúa el entrenamiento de FT sobre itw-sm con LR 10<sup>-5</sup> (100× menor) para mitigar el <em>catastrophic forgetting</em>.</li>
@@ -367,7 +367,7 @@
       <table>
         <tr><th>Modelo</th><th>Accuracy</th><th>F1</th></tr>
         <tr><td>MLP + PCA</td><td class="num">0.724</td><td class="num">0.738</td></tr>
-        <tr><td>CNN desde cero</td><td class="num">0.884</td><td class="num">0.882</td></tr>
+        <tr><td>CNN</td><td class="num">0.884</td><td class="num">0.882</td></tr>
         <tr><td>ResNet50 FE</td><td class="num">0.881</td><td class="num">0.881</td></tr>
         <tr><td>ResNet50 FT</td><td class="num best">0.934</td><td class="num best">0.934</td></tr>
       </table>

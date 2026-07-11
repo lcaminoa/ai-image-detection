@@ -15,9 +15,7 @@ from src.config import (
 )
 
 
-# ---------------------------------------------------------------------------
-# Parte 1: generar splits.csv
-# ---------------------------------------------------------------------------
+# === 1) generar splits.csv ===
 
 def build_splits_csv(raw: Path = DATA_RAW, splits_csv: Path = SPLITS_CSV, seed: int = SEED) -> None:
     """
@@ -67,9 +65,7 @@ def build_splits_csv(raw: Path = DATA_RAW, splits_csv: Path = SPLITS_CSV, seed: 
         print(f"{split:5s}: {len(sub):>6} imgs  ({n_real} real / {n_fake} fake)")
 
 
-# ---------------------------------------------------------------------------
-# Parte 2: redimensionar y guardar en processed/
-# ---------------------------------------------------------------------------
+# === 2) redimensionar y guardar en processed/ ===
 
 def preprocess_dataset(processed: Path = DATA_PROC, splits_csv: Path = SPLITS_CSV, img_size: int = IMG_SIZE) -> None:
     """
@@ -116,9 +112,7 @@ def preprocess_dataset(processed: Path = DATA_PROC, splits_csv: Path = SPLITS_CS
     print(f"Listo. {len(df)} imágenes en {processed}")
 
 
-# ---------------------------------------------------------------------------
-# Parte 3: Dataset de PyTorch
-# ---------------------------------------------------------------------------
+# === 3) Dataset de PyTorch ===
 
 def get_transforms(split: str):
     """
